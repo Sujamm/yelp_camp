@@ -5,15 +5,29 @@ var express = require("express"),
 	mongoose = require("mongoose"),
 	Campground = require("./models/campground"),
 	Comment = require("./models/comment"),
-	seedDB = require("./seeds");
-
-//seedDB();
+	seedDB = require("./seeds"),
+	passport = require("passport"),
+	LocalStrategy = require("passport-local"),
+	User = require("./models/user");
 
 mongoose.connect("mongodb://localhost/yelp_camp", { useUnifiedTopology: true,
 useNewUrlParser: true });
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
+
+//seedDB();
+
+app.use(require("express-session")({
+	secret: "harry potter books are the best",
+	resave: false,
+	saveUninitialized: false
+}));
+app.use(passport.initialize());
+app.use(passport.session());
+passport.use(new LocalStrategy(User.authenticate()));
+passport.serializeUser(User.serializeUser());
+passport.deserializeUser(User.deserializeUser());
 
 //---- ROUTES ------
 //HOME - Landing page
@@ -95,6 +109,28 @@ app.post("/campgrounds/:id/comments", (req, res) => {
 	});
 });
 
+//===============
+// AUTH ROUTES
+//===============
+
+//Shwo register form
+app.get("/register", (req, res) => {
+	res.render("register");
+});
+
+//Sign up logic
+app.post("/register", (req, res) =>{
+	var newUser =new User({username: req.body.username});
+	User.register(newUser, req.body.password, (err, user) =>{
+		if(err){
+			console.log(err);
+			return res.render("register");
+		} 
+		passport.authenticate("local")(req, res, () => {
+			res.redirect("/campgrounds");
+		});
+	});
+});
 
 app.listen(3000, ()=>{
 	console.log("Server Started ");
