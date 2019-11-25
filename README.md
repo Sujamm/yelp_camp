@@ -1,6 +1,6 @@
 # Yelp Campgrounds
 
-List of campgrounds with the funtionality to add new ones and see existing ones.
+Yelp type of website to rate and see campgrounds. User can add new campgrounds and comments to existing ones.
 
 ## Getting Started
 
