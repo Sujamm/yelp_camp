@@ -8,6 +8,7 @@ var express = require("express"),
 	seedDB = require("./seeds"),
 	passport = require("passport"),
 	LocalStrategy = require("passport-local"),
+	methodOverride = require("method-override"),
 	User = require("./models/user");
 //Requiring routes
 var commentRoutes = require("./routes/comments"),
@@ -15,10 +16,11 @@ var commentRoutes = require("./routes/comments"),
 	indexRoutes = require("./routes/index");
 
 mongoose.connect("mongodb://localhost/yelp_camp", { useUnifiedTopology: true,
-useNewUrlParser: true });
+useNewUrlParser: true, useFindAndModify: false });
 app.use(bodyParser.urlencoded({extended: true}));
 app.set("view engine", "ejs");
 app.use(express.static(__dirname + "/public"));
+app.use(methodOverride("_method"));
 
 //Remove all records and add new ones with seed file
 //seedDB();

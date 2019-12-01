@@ -1,6 +1,7 @@
 var express = require("express");
 var router = express.Router();
 var Campground = require("../models/campground");
+var Comment = require("../models/comment");
 
 
 //INDEX - show all campgrounds
@@ -46,6 +47,43 @@ router.get("/:id", (req, res) => {
 			console.log(err);
 		} else {
 			res.render("campgrounds/show", {campground: camp});	
+		}
+	});
+});
+
+//EDIT - Show form to edit a campground
+router.get("/:id/edit", (req, res) => {
+	Campground.findById(req.params.id, (err, camp) => {
+		if(err){
+			console.log(err);
+			res.redirect("/campgrounds");
+		} else {
+			res.render("campgrounds/edit", {campground: camp});
+		}
+	});
+});
+
+//UPDATE - Updates the campground on the DB and redirects user
+router.put("/:id", (req, res) => {
+	Campground.findOneAndUpdate({_id: req.params.id}, req.body.campground ,(err, foundCamp) => {
+		if(err){
+			console.log(err);
+			res.redirect("/campgrounds");
+		} else {
+			res.redirect("/campgrounds/" + req.params.id);
+		}
+	});
+});
+
+//DESTROY - Campground route
+router.delete("/:id", (req, res) => {
+	Campground.findById(req.params.id, (err, camp) => {
+		if(err){
+			console.log(err);
+		} else {
+			camp.remove();
+			//req.flash('success', 'Campground deleted successfully!');
+			res.redirect("/campgrounds/")
 		}
 	});
 });

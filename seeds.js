@@ -1,6 +1,7 @@
 var mongoose = require("mongoose");
 var Campground = require("./models/campground");
 var Comment = require("./models/comment");
+var User = require("./models/user");
 
 var data = [
 	{
@@ -16,17 +17,50 @@ var data = [
 	{
 		name:"Canyon Floor",
 		image: "https://cdn.pixabay.com/photo/2016/01/19/16/48/teepee-1149402_960_720.jpg",
-		description: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like)."
+		description: "It is a long established fact that a reader will be distracted by the readable content of a page when looking at its layout. The point of using Lorem Ipsum is that it has a more-or-less normal distribution of letters, as opposed to using 'Content here, content here', making it look like readable English. Many desktop publishing packages and web page editors now use Lorem Ipsum as their default model text, and a search for 'lorem ipsum' will uncover many web sites still in their infancy. Various versions have evolved over the years, sometimes by accident, sometimes on purpose (injected humour and the like).",
+		
 	}
 ];
 
-function seedDB() {
+function deleteCamp_Comm(){
+	Comment.deleteMany({}, (err) => {
+		if(err){
+			console.log(err);
+		} else {
+			console.log("Comments deleted");
+			Campground.deleteMany({}, (err) => {
+				if(err){
+					console.log(err);
+				} else {
+					console.log("Campgrounds deleted");
+				}
+			});
+		}
+	});
+}
+
+function deleteUsers(){
+	User.deleteMany({}, (err) => {
+		if(err){
+			console.log(err);
+		} else {
+			console.log("Users deleted");
+		}
+	});
+}
+
+function seedDB(){
+	deleteCamp_Comm();
+	deleteUsers();
+}
+
+/*function seedDB() {
 	//Remove all campgrounds
 	Campground.remove({}, (err) => {
 	if(err){
 		console.log(err);
 	} else {
-		/*console.log("Removed Campgrounds");
+		console.log("Removed Campgrounds");
 		//add campground
 		data.forEach( (seed) => {
 		Campground.create(seed, (err, campground) => {
@@ -49,9 +83,9 @@ function seedDB() {
 							   });
 			}
 		});
-	});*/
+	});
 		}
 	});
-}
+}*/
 
 module.exports = seedDB;
