@@ -18,9 +18,9 @@ var campgroundSchema = new mongoose.Schema({
 	}]
 });
 
-campgroundSchema.pre('remove', async (next) => {
+campgroundSchema.pre('remove', async function(next) {
 	try {
-		await Comment.remove({
+		await Comment.deleteMany({
 			"_id" : {
 				$in: this.comments
 			}
