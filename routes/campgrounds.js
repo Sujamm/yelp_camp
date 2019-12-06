@@ -25,7 +25,7 @@ router.post("/", isLoggedIn, (req, res) =>{
 				username: req.user.username
 			},
 	 	newCampground = {name: name, image: image, description: desc, author: author};
-	Campground.create(newCampground, (err, newlyCreated) => {
+	Campground.create(newCampground, (err, camp) => {
 		if(err){
 			console.log(err);
 		} else {
@@ -52,39 +52,25 @@ router.get("/:id", (req, res) => {
 });
 
 //EDIT - Show form to edit a campground
-router.get("/:id/edit", (req, res) => {
+router.get("/:id/edit", checkCampgroundOwnerShip, (req, res) => {
 	Campground.findById(req.params.id, (err, camp) => {
-		if(err){
-			console.log(err);
-			res.redirect("/campgrounds");
-		} else {
-			res.render("campgrounds/edit", {campground: camp});
-		}
+		res.render("campgrounds/edit", {campground: camp});
 	});
 });
 
 //UPDATE - Updates the campground on the DB and redirects user
-router.put("/:id", (req, res) => {
-	Campground.findOneAndUpdate({_id: req.params.id}, req.body.campground ,(err, foundCamp) => {
-		if(err){
-			console.log(err);
-			res.redirect("/campgrounds");
-		} else {
-			res.redirect("/campgrounds/" + req.params.id);
-		}
+router.put("/:id", checkCampgroundOwnerShip, (req, res) => {
+	Campground.findOneAndUpdate({_id: req.params.id}, req.body.campground ,(err, camp) => {
+		res.redirect("/campgrounds/" + req.params.id);
 	});
 });
 
 //DESTROY - Campground route
-router.delete("/:id", (req, res) => {
+router.delete("/:id", checkCampgroundOwnerShip, (req, res) => {
 	Campground.findById(req.params.id, (err, camp) => {
-		if(err){
-			console.log(err);
-		} else {
-			camp.remove();
-			//req.flash('success', 'Campground deleted successfully!');
-			res.redirect("/campgrounds/")
-		}
+		camp.remove();
+		//req.flash('success', 'Campground deleted successfully!');
+		res.redirect("/campgrounds/");
 	});
 });
 
@@ -95,5 +81,24 @@ function isLoggedIn(req, res, next){
 	}
 	res.redirect("/login");
 }
+
+function checkCampgroundOwnerShip(req, res, next) {
+	if(req.isAuthenticated()){
+		Campground.findById(req.params.id, (err, camp) => {
+			if(err){
+				console.log(err);
+				res.redirect("/campgrounds");
+			} else {
+				if(camp.author.id.equals(req.user._id)){
+					next();
+				} else {
+					res.redirect("back");
+				}
+			}
+		});
+	} else {
+		res.redirect("back");
+	}
+};
 
 module.exports = router;
