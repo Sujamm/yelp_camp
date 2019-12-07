@@ -1,7 +1,7 @@
 body {
-	background: #DFeCF5;
+    background: #DFeCF5;
 }
 
-#delete-form{
-	display: inline;
+.delete-form {
+    display: inline;
 }
