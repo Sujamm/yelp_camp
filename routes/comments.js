@@ -54,7 +54,8 @@ router.put("/:comment_id", middleware.checkCommentOwnership, (req, res) => {
 
 //DELETE - Destroy a  comment route
 router.delete("/:comment_id", middleware.checkCommentOwnership, (req, res) => {
-    Comment.findOneAndDelete({ _id: req.params.comment_id }, (err) => {
+    Comment.findById(req.params.comment_id, (err, comment) => {
+        comment.remove();
         res.redirect("/campgrounds/" + req.params.id);
     });
 });
