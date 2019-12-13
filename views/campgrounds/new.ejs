@@ -17,7 +17,10 @@
                         <input class="form-control" type="text" placeholder="description" name="description">
                     </div>
                     <div class="form-group">
-                        <input class="form-control" type="text" placeholder="rating" name="rating">
+                        <input id="i-rating" class="form-control" type="text" placeholder="rating" name="rating">
+                        <% for(var i = 0; i < 5; i++) {%>
+                            <span><i class="far fa-star" onmouseover="iconsStart(<%= i %>)" onclick="setRating(<%= i+1 %>)"></i></span>
+                            <% } %>
                     </div>
                     <div class="form-group">
                         <input class="btn btn-lg btn-primary btn-block" type="submit">
@@ -27,4 +30,5 @@
             </div>
         </div>
     </div>
+    <script type="text/javascript" src="/JS/index.js"></script>
     <% include ../partials/footer %>

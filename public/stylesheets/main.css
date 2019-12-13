@@ -5,3 +5,7 @@ body {
 .delete-form {
     display: inline;
 }
+
+.checked {
+    color: #d4af37;
+}
