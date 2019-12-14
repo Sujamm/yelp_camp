@@ -1,5 +1,5 @@
 var icons = document.querySelectorAll("i");
-var inputRating = document.getElementsByName("#i-rating");
+var inputRating = document.getElementById('i-rating');
 
 function iconsStart(num) {
     var i = 0;
@@ -21,3 +21,7 @@ function setRating(num) {
     inputRating.value = num.toString();
     console.log("Value after: " + inputRating.value);
 };
+
+function drawStars(rating) {
+    console.log(rating);
+}
