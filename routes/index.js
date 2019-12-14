@@ -11,7 +11,7 @@ router.get("/", (req, res) => {
 
 //Shwo register form
 router.get("/register", (req, res) => {
-    res.render("register");
+    res.render("register", { page: 'register' });
 });
 
 //Sign up logic
@@ -20,7 +20,7 @@ router.post("/register", (req, res) => {
     User.register(newUser, req.body.password, (err, user) => {
         if (err) {
             req.flash("error", err.message);
-            return res.redirect("register");
+            return res.redirect("register", { page: 'register' });
         }
         passport.authenticate("local")(req, res, () => {
             req.flash("success", "Welcome to YempCamp " + user.username);
@@ -31,7 +31,7 @@ router.post("/register", (req, res) => {
 
 //Show login form
 router.get("/login", (req, res) => {
-    res.render("login");
+    res.render("login", { page: 'login' });
 });
 
 //Handling login logic
@@ -54,7 +54,7 @@ function isLoggedIn(req, res, next) {
     if (req.isAuthenticated()) {
         return next();
     }
-    res.redirect("/login");
+    res.redirect("/login", { page: 'login' });
 }
 
 module.exports = router;
