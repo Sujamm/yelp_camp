@@ -29,7 +29,7 @@
                             <em>Submitted By <%= campground.author.username %></em>
                         </p>
                         <p>
-                            <% if(campground.ratin || campground.rating > 0) {%>
+                            <% if(campground.rating || campground.rating > 0) {%>
                                 <% for(var i = 1; i <= campground.rating; i++) {%>
                                     <span><i class="fas fa-star checked"></i></span>
                                     <% } %>
