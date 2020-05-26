@@ -15,11 +15,16 @@ User = require("./models/user");
 var commentRoutes = require("./routes/comments"),
     campgroundRoutes = require("./routes/campgrounds"),
     indexRoutes = require("./routes/index");
-
-mongoose.connect("mongodb://localhost/yelp_camp", {
+//mongodb://localhost/yelp_camp
+//mongodb+srv://sujairamm:C4rL1sL300@cluster0-hf1hq.mongodb.net/test?retryWrites=true&w=majority
+mongoose.connect(process.env.DATABASEURL, {
     useUnifiedTopology: true,
     useNewUrlParser: true,
     useFindAndModify: false
+}).then(() => {
+    console.log('Connected to DB!');
+}).catch(err => {
+    console.log('ERROR: ', err.message);
 });
 app.use(bodyParser.urlencoded({ extended: true }));
 app.set("view engine", "ejs");
@@ -29,6 +34,7 @@ app.use(flash());
 
 //Remove all records and add new ones with seed file
 //seedDB();
+
 
 //Passport configuration
 app.use(require("express-session")({
